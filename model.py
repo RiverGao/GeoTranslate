@@ -164,7 +164,7 @@ class GeoTranslator():
                     syllablesT.append(self.syllableTable.lookup(syllable))
                 
                 else: # 音节不在表内
-                    singlePhonetics = self.phoneticSplit(phonetic) # 拆分成单音标的列表
+                    singlePhonetics = self.phoneticSplit(phonetic) # 拆分成单音标的列表，这里改了一下
                     phonesT = [] # 存储各个音标的翻译
                     for singlePhonetic in singlePhonetics:
                         assert self.phoneticTable.inTable(singlePhonetic) # 假设所有音标都能找到翻译

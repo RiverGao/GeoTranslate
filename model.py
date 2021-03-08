@@ -81,7 +81,7 @@ class GeoTranslator():
     
     def syllabSplit(self, unit: str) -> tuple(list(str), list(str)):
         '''
-        Split a unknown specific name unit into several syllables together with
+        Split an unknown specific name unit into several syllables together with
         corresponding phonetics.
 
         Parameters
@@ -97,6 +97,23 @@ class GeoTranslator():
         '''
         syllables, phonetics = self.syllableSplitor.split(unit)
         return (syllables, phonetics)
+    
+    def phoneticSplit(self, phonetic: str) -> list(str):
+        '''
+        Split the phonetics of an unknown syllable into several single phonetics
+
+        Parameters
+        ----------
+        phonetic : str
+            phonetics of an unknown syllable in syllableTable
+
+        Returns
+        -------
+        list(str)
+            list of single phonetics
+
+        '''
+        return self.phoneticSplitor.split(phonetic)
     
     def specTranslate(self, specName: list(str)) -> list(str):
         '''
@@ -147,7 +164,7 @@ class GeoTranslator():
                     syllablesT.append(self.syllableTable.lookup(syllable))
                 
                 else: # 音节不在表内
-                    singlePhonetics = self.phoneticSplitor.split(phonetic) # 拆分成单音标的列表
+                    singlePhonetics = self.phoneticSplit(phonetic) # 拆分成单音标的列表
                     phonesT = [] # 存储各个音标的翻译
                     for singlePhonetic in singlePhonetics:
                         assert self.phoneticTable.inTable(singlePhonetic) # 假设所有音标都能找到翻译

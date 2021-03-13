@@ -10,12 +10,12 @@ from splitors import nameSplitor, unitSplitor, syllableSplitor, phoneticSplitor
 
 class GeoTranslator():
     
-    def __init__(self):
-        # 四个表格分别是四个类
-        self.genericTable = genericTable()
-        self.unitTable = unitTable()
-        self.syllableTable = syllableTable()
-        self.phoneticTable = phoneticTable()
+    def __init__(self, tableData):
+        # 四个表格分别是四个类，tableData 包含 4 个字典的数据
+        self.genericTable = genericTable(tableData[0])
+        self.unitTable = unitTable(tableData[1])
+        self.syllableTable = syllableTable(tableData[2])
+        self.phoneticTable = phoneticTable(tableData[3])
         
         # 四个拆分器
         self.nameSplitor = nameSplitor()
@@ -164,7 +164,7 @@ class GeoTranslator():
                     syllablesT.append(self.syllableTable.lookup(syllable))
                 
                 else: # 音节不在表内
-                    singlePhonetics = self.phoneticSplit(phonetic) # 拆分成单音标的列表，这里改了一下
+                    singlePhonetics = self.phoneticSplit(phonetic) # 拆分成单音标的列表
                     phonesT = [] # 存储各个音标的翻译
                     for singlePhonetic in singlePhonetics:
                         assert self.phoneticTable.inTable(singlePhonetic) # 假设所有音标都能找到翻译

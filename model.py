@@ -44,7 +44,7 @@ class GeoTranslator():
         # TODO: implement
         return None
     
-    def nameSplit(self, name: str) -> tuple(str, str):
+    def nameSplit(self, name: str) -> tuple(list, str):
         '''
         Split the specific name and the generic name.
 
@@ -55,21 +55,21 @@ class GeoTranslator():
 
         Returns
         -------
-        tuple(str, str) :
-            [0]: Specific name
+        tuple(list, str) :
+            [0]: Specific name in word list form
             [1]: Translated generic name
         '''
         spec, genT = self.nameSplitor.split(name)
         return (spec, genT)
     
-    def unitSplit(self, specName: str) -> list(str):
+    def unitSplit(self, specName: list(str)) -> list(str):
         '''
         Split the whole specific name into one or several translatable units.
 
         Parameters
         ----------
-        specName : str
-            Whole specific names.
+        specName : list(str)
+            Whole specific names with GEN_TOKEN in list form.
 
         Returns
         -------

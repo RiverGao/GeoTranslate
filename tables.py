@@ -57,25 +57,25 @@ class genericTable(Table):
     # 通名的英文-中文字典
     def __init__(self, tableData):
         # TODO: implement
-        super(genericTable).__init__(tableData)
+        super(genericTable, self).__init__(tableData)
 
 class unitTable(Table):
     # 专名单元的英文-中文字典（暂时不用）
     def __init__(self, tableData):
         # TODO: implement
-        super(unitTable).__init__(tableData)
+        super(unitTable, self).__init__(tableData)
         
 class syllableTable(Table):
     # 特殊音节（附录C）的英文-中文字典
     def __init__(self, tableData):
         # TODO: implement
-        super(syllableTable).__init__(tableData)
+        super(syllableTable, self).__init__(tableData)
 
 class phoneticTable(Table):
     # 音标的英文-中文字典（就是那个大表格）
     def __init__(self, tableData):
         # TODO: implement
-        super(phoneticTable).__init__(tableData)
+        super(phoneticTable, self).__init__(tableData)
 
 
 

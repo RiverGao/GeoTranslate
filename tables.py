@@ -5,9 +5,20 @@ Created on Sun Mar  7 23:45:26 2021
 @author: 高长江
 """
 
-def initTables():
-    # init all four tables
-    # TODO: implement
+def initTables() -> list:
+    '''
+    初始化四个字典
+
+    Returns
+    -------
+    list
+        长度为 4 的列表，每个元素是一个字典
+        [0]: 通名
+        [1]: 单元
+        [2]: 音节
+        [3]: 音标
+
+    '''
     phonetics = {
     'b': { 'none': "布",
            'æ': "巴", 'ɑ': "巴", 'ʌ': "巴",
@@ -162,7 +173,24 @@ def initTables():
            'ɪŋ': "芬", 'iŋ': "芬",
            'un': "丰", 'oʊn': "丰",
            'uŋ': "丰"},
-    'z''dz': { 'none': "兹",
+    'z': { 'none': "兹",
+               'æ': "扎", 'ɑ': "扎", 'ʌ': "扎",
+               'ɛ': "泽", 'eɪ': "泽",
+               'ə': "泽",
+               'i': "齐", 'ɪ': "齐", 'ji': "齐", 'jɪ': "齐",
+               'ɔ': "佐", 'o': "佐", 'əʊ': "佐", 'oʊ': "佐",
+               'u': "祖",
+               'ju': "久",
+               'aɪ': "宰",
+               'aʊ': "藻",
+               'æn': "赞", 'an': "赞", 'ʌn': "赞", 'æŋ': "赞",
+               'ɑn': "藏", 'ʌŋ': "藏", 'aʊn': "藏", 'ɔn': "藏", 'ɔŋ': "藏",
+               'ən': "曾", 'əŋ': "曾", 'ɛn': "曾", 'ɛŋ': "曾",
+               'ɪn': "津", 'in': "津", 'ɪən': "津", 'jən': "津",
+               'ɪŋ': "京", 'iŋ': "京",
+               'un': "尊", 'oʊn': "尊",
+               'uŋ': "宗"},
+    'dz': { 'none': "兹",
                'æ': "扎", 'ɑ': "扎", 'ʌ': "扎",
                'ɛ': "泽", 'eɪ': "泽",
                'ə': "泽",
@@ -196,23 +224,57 @@ def initTables():
             'ɪŋ': "青", 'iŋ': "青",
             'un': "聪", 'oʊn': "聪",
             'uŋ': "聪"},
-    's''ð''θ': { 'none': "斯/丝",
-                 'æ': "萨", 'ɑ': "萨", 'ʌ': "萨",
-                 'ɛ': "塞", 'eɪ': "塞",
-                 'ə': "瑟",
-                 'i': "西/锡", 'ɪ': "西/锡", 'ji': "西/锡", 'jɪ': "西/锡",
-                 'ɔ': "索", 'o': "索", 'əʊ': "索", 'oʊ': "索",
-                 'u': "苏",
-                 'ju': "休",
-                 'aɪ': "赛",
-                 'aʊ': "绍",
-                 'æn': "桑", 'an': "桑", 'ʌn': "桑", 'æŋ': "桑",
-                 'ɑn': "桑", 'ʌŋ': "桑", 'aʊn': "桑", 'ɔn': "桑", 'ɔŋ': "桑",
-                 'ən': "森", 'əŋ': "森", 'ɛn': "森", 'ɛŋ': "森",
-                 'ɪn': "辛", 'in': "辛", 'ɪən': "辛", 'jən': "辛",
-                 'ɪŋ': "辛", 'iŋ': "辛",
-                 'un': "孙", 'oʊn': "孙",
-                 'uŋ': "松"},
+    's': { 'none': "斯/丝",
+            'æ': "萨", 'ɑ': "萨", 'ʌ': "萨",
+            'ɛ': "塞", 'eɪ': "塞",
+            'ə': "瑟",
+            'i': "西/锡", 'ɪ': "西/锡", 'ji': "西/锡", 'jɪ': "西/锡",
+            'ɔ': "索", 'o': "索", 'əʊ': "索", 'oʊ': "索",
+            'u': "苏",
+            'ju': "休",
+            'aɪ': "赛",
+            'aʊ': "绍",
+            'æn': "桑", 'an': "桑", 'ʌn': "桑", 'æŋ': "桑",
+            'ɑn': "桑", 'ʌŋ': "桑", 'aʊn': "桑", 'ɔn': "桑", 'ɔŋ': "桑",
+            'ən': "森", 'əŋ': "森", 'ɛn': "森", 'ɛŋ': "森",
+            'ɪn': "辛", 'in': "辛", 'ɪən': "辛", 'jən': "辛",
+            'ɪŋ': "辛", 'iŋ': "辛",
+            'un': "孙", 'oʊn': "孙",
+            'uŋ': "松"},
+    'ð': { 'none': "斯/丝",
+            'æ': "萨", 'ɑ': "萨", 'ʌ': "萨",
+            'ɛ': "塞", 'eɪ': "塞",
+            'ə': "瑟",
+            'i': "西/锡", 'ɪ': "西/锡", 'ji': "西/锡", 'jɪ': "西/锡",
+            'ɔ': "索", 'o': "索", 'əʊ': "索", 'oʊ': "索",
+            'u': "苏",
+            'ju': "休",
+            'aɪ': "赛",
+            'aʊ': "绍",
+            'æn': "桑", 'an': "桑", 'ʌn': "桑", 'æŋ': "桑",
+            'ɑn': "桑", 'ʌŋ': "桑", 'aʊn': "桑", 'ɔn': "桑", 'ɔŋ': "桑",
+            'ən': "森", 'əŋ': "森", 'ɛn': "森", 'ɛŋ': "森",
+            'ɪn': "辛", 'in': "辛", 'ɪən': "辛", 'jən': "辛",
+            'ɪŋ': "辛", 'iŋ': "辛",
+            'un': "孙", 'oʊn': "孙",
+            'uŋ': "松"},
+    'θ': { 'none': "斯/丝",
+            'æ': "萨", 'ɑ': "萨", 'ʌ': "萨",
+            'ɛ': "塞", 'eɪ': "塞",
+            'ə': "瑟",
+            'i': "西/锡", 'ɪ': "西/锡", 'ji': "西/锡", 'jɪ': "西/锡",
+            'ɔ': "索", 'o': "索", 'əʊ': "索", 'oʊ': "索",
+            'u': "苏",
+            'ju': "休",
+            'aɪ': "赛",
+            'aʊ': "绍",
+            'æn': "桑", 'an': "桑", 'ʌn': "桑", 'æŋ': "桑",
+            'ɑn': "桑", 'ʌŋ': "桑", 'aʊn': "桑", 'ɔn': "桑", 'ɔŋ': "桑",
+            'ən': "森", 'əŋ': "森", 'ɛn': "森", 'ɛŋ': "森",
+            'ɪn': "辛", 'in': "辛", 'ɪən': "辛", 'jən': "辛",
+            'ɪŋ': "辛", 'iŋ': "辛",
+            'un': "孙", 'oʊn': "孙",
+            'uŋ': "松"},
     'ʒ': { 'none': "日",
            'ə': "热",
            'ɔ': "若", 'o': "若", 'əʊ': "若", 'oʊ': "若",
@@ -479,7 +541,7 @@ def initTables():
          'wash': "洼地/沼泽", 'water': "河/湾/海峡", 'waterfall': "瀑布", 'waterway': "水道",
          'well': "井", 'west': "西", 'western': "西/西部", 'wharf': "码头",
          'wold': "山地", 'wood': "林地"}
-    phonetic = {'prefix':
+    syllables = {'prefix':
             {'bau': "鲍", 'baw': "鲍", 'bow': "鲍", 'bur': "伯", 'cau': "考",
           'caw': "考", 'cow': "考", 'cur': "柯", 'daw': "道", 'down': "唐",
           'dun': "邓", 'gau': "高", 'hun': "亨", 'kir': "柯", 'kirk': "柯克",
@@ -531,13 +593,19 @@ def initTables():
           'worthy': "沃西", 'wright': "赖特", 'xius': "修斯", 'yard': "亚德", 'yer': "耶",
           'zen': "曾", 'zer': "泽"}
            }
-    return
+    units = dict()
+    tables = []
+    tables.append(generics)
+    tables.append(units)
+    tables.append(syllables)
+    tables.append(phonetics)
+    return tables
 
 
 class Table():
     # Father class of tables
     def __init__(self, tableData):
-        # TODO: implement
+        # tableData 是一个字典
         self.data = tableData
     
     def inTable(self, key: str) -> bool:
@@ -555,8 +623,7 @@ class Table():
             the key is or is not in the table
 
         '''
-        # TODO: implement
-        return (key in self.tableData.keys())
+        return (key in self.data)
     
     def lookup(self, key: str) -> str:
         '''
@@ -566,15 +633,14 @@ class Table():
         ----------
         key : str
             The source name/unit/syllable/phonetic
-
+            其中 phonetic 需要重写
         Returns
         -------
         str
             translation
 
         '''
-        # TODO: implement
-        return self.tableData[key]
+        return self.data[key]
 
 class genericTable(Table):
     # 通名的英文-中文字典
@@ -599,9 +665,47 @@ class phoneticTable(Table):
     def __init__(self, tableData):
         # TODO: implement
         super(phoneticTable, self).__init__(tableData)
+    def inTable(self, key: tuple) -> bool:
+        '''
+        重写判断函数，原因：需要查询两重 key
 
+        Parameters
+        ----------
+        key : tuple
+            (leadning, following)
 
+        Returns
+        -------
+        bool
+            是否在表内
 
+        '''
+        leading = key[0]
+        following  = key[1]
+        if leading not in self.data: # leading 查不到
+            return False
+        else:
+            entry_leading = self.data[leading]
+            return (following in entry_leading)
+
+    def lookup(self, key: tuple) -> str:
+        '''
+        重写查询函数
+
+        Parameters
+        ----------
+        key : tuple
+            (leadning, following)
+
+        Returns
+        -------
+        str
+            翻译
+
+        '''
+        leading = key[0]
+        following  = key[1]
+        return self.data[leading][following]
 
 
 

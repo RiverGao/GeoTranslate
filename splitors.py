@@ -86,10 +86,15 @@ class unitSplitor(Splitor):
         '''
         ret = []
         idx_gen = name.index(GEN_TOKEN)
-        # 将专名分成 3 部分： GEN_TOKEN 前、本身、后，前后两个部分可以为空字符串
-        ret.append(' '.join(name[: idx_gen]))
+        # 将专名分成 3 部分： GEN_TOKEN 左、本身、右，左右两个部分可以为空字符串
+        left = name[: idx_gen]
+        right = name[idx_gen + 1:]
+        if len(right) > 0 and right[0] == 'of':
+            right.pop(0) # 去掉开头的 of
+        
+        ret.append(' '.join(left))
         ret.append(GEN_TOKEN)
-        ret.append(' '.join(name[idx_gen + 1:]))
+        ret.append(' '.join(right))
         return ret
 
 class syllableSplitor(Splitor):

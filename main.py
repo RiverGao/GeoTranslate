@@ -20,6 +20,7 @@ inputNames = readData()
 # 输出结果
 results = translator.run(inputNames)
 # 打印结果
+print(inputNames)
 print(results)
 # 保存结果
 # saveData(results)

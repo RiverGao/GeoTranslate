@@ -9,6 +9,7 @@ from config import GEN_TOKEN
 
 import eng_to_ipa as ipa
 
+word_ipa_dict = {}
 class Splitor():
     # xxxSplitor 的父类
     def __init__(self, table):
@@ -33,7 +34,7 @@ class nameSplitor(Splitor):
         '''
         words = name.split() # 单词的列表
         possible_gen_idx = [] # indices of possible generic names
-        ret = [None, None] # 返回的列表
+        ret = [None, None, None] # 返回的列表
         for i in range(len(words)):
             if self.table.inTable(words[i]):
                 possible_gen_idx.append(i)
@@ -60,6 +61,7 @@ class nameSplitor(Splitor):
             ret[1] = ''
             words.append(GEN_TOKEN)
         else:
+            ret[2] = words[idx_gen]
             ret[1] = self.table.lookup(words[idx_gen]) # 顺便翻译
             words[idx_gen] = GEN_TOKEN # 标记原来通名所在的位置
             # 原因：当 unit 不止两个时，需要知道通名的位置，以确定专名的排列顺序
@@ -126,6 +128,8 @@ class syllableSplitor(Splitor):
             if can_convert:
                 ret[0].append(unit)
                 ret[1].append(ipa.convert(unit, stress_marks='none'))
+                word_ipa_dict[unit] = ipa.convert(unit, stress_marks='none')
+                #print(word_ipa_dict)
                 return ret
             else:
                 raise ValueError('Cannot convert unit "{}" to IPA'.format(unit))
@@ -214,8 +218,11 @@ class phoneticSplitor(Splitor):
                 element_list.append((l, f)) # 存储找到的 l-f 对
                 _word = _word[len(tail):] # 切掉找到的 following
             # 一个单词找完之后
-            ret_list.extend(element_list)
+            #ret_list.extend(element_list)
+            #print("element_list:", element_list)
+            ret_list.append(element_list)
         # 全部找完以后
+        #print(ret_list)
         return ret_list
                     
                 

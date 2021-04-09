@@ -8,6 +8,7 @@ Created on Sun Mar  7 23:44:50 2021
 from tables import genericTable, unitTable, syllableTable, phoneticTable
 from splitors import nameSplitor, unitSplitor, syllableSplitor, phoneticSplitor
 from config import GEN_TOKEN
+import copy
 
 class GeoTranslator():
     
@@ -65,8 +66,8 @@ class GeoTranslator():
             [0]: Specific name in word list form
             [1]: Translated generic name
         '''
-        spec, genT = self.nameSplitor.split(name)
-        return (spec, genT)
+        spec, genT, gen = self.nameSplitor.split(name)
+        return (spec, genT, gen)
     
     def unitSplit(self, specName: list) -> list:
         '''
@@ -121,7 +122,7 @@ class GeoTranslator():
         '''
         return self.phoneticSplitor.split(phonetic)
     
-    def specTranslate(self, specName: list) -> list:
+    def specTranslate(self, spec: str) -> list:
         '''
         Translate the specific name after split from the generic name.
 
@@ -138,14 +139,18 @@ class GeoTranslator():
             Translated specific name parts.
             e.g.: ['皇家', GEN_TOKEN, '伦敦']
         '''
-        units = self.unitSplit(specName)
+        units = self.unitSplit(spec)
+
+        #print("units", units)
         specT = []
         for unit in units:
             unitT = self.unitTranslate(unit)
+            #print(unitT)
             specT.append(unitT)
+        #print(specT)
         return specT
     
-    def unitTranslate(self, unit: str) -> str:
+    def unitTranslate(self, unit: str):
         '''
         Translate a specific name unit.
 
@@ -159,34 +164,63 @@ class GeoTranslator():
         str
             translation of the unit
         '''
-        
         if self.unitTable.inTable(unit): # 如果专名单元在表内
             return self.unitTable.lookup(unit)
         elif unit == GEN_TOKEN:
             return GEN_TOKEN
         else: # 专名单元不在表内
             syllables, phonetics = self.syllabSplit(unit) # 按音节拆分，并得到对应音标片段
+            #print("syllables", syllables)
+            #print("phonetics", phonetics)
             syllablesT = [] # 存储各个音节的翻译
-            
+            female_syllablesT = []
             for syllable, phonetic in zip(syllables, phonetics): 
                 # 此处的 phonetic 是音节对应的音标片段
+                #print("syllable", syllable, "phonetic", phonetic)
                 if self.syllableTable.inTable(syllable): # 音节在表内
-                    syllablesT.append(self.syllableTable.lookup(syllable))
+                    new_word = self.syllableTable.lookup(syllable)
+                    syllablesT.append(new_word)
+                    female_syllablesT.append(new_word)
                 
                 else: # 音节不在表内
                     singlePhonetics = self.phoneticSplit(phonetic) # 拆分成单音标的列表
-                    phonesT = [] # 存储各个音标的翻译
-                    for singlePhonetic in singlePhonetics:
-                        if not self.phoneticTable.inTable(singlePhonetic):
+                    #print("singlePhonetics:", singlePhonetics)
+                    for word in singlePhonetics:
+                        phonesT = []  # 存储各个音标的翻译
+                        female_phonesT = []
+                        for singlePhonetic in word:
+                            if not self.phoneticTable.inTable(singlePhonetic):
                             # 假设所有音标都能找到翻译
-                            raise ValueError('Invalid phonetic pair: {}'.format(singlePhonetic))
-                        phonesT.append(self.phoneticTable.lookup(singlePhonetic))
-                    syllablesT.append(''.join(phonesT))
-            
+                                raise ValueError('Invalid phonetic pair: {}'.format(singlePhonetic))
+                            phonesT.append(self.phoneticTable.lookup(singlePhonetic))
+                        #print('phoneT:', phonesT)
+                        wordT = ""
+                        femaleT = ""
+                        for item in phonesT:
+                            lst = item.split(" ")
+                            wordT += lst[0]
+                            femaleT += lst[-1]
+                        syllablesT.append(wordT)
+                        female_syllablesT.append(femaleT)
             translation = ''.join(syllablesT)
-            return translation
+            #print("syllablesT:", syllablesT)
+            #print("female_syllablesT", female_syllablesT)
+            expression_res = [[copy.deepcopy(syllablesT), ""], ]
+            for i in range(0, len(syllablesT)):
+                if syllablesT[i] != female_syllablesT[i]:
+                    temp = copy.deepcopy(expression_res)
+                    for item in temp:
+                        #print("item", item)
+                        item[0][i] = female_syllablesT[i]
+                        item[1] += "assuming \"{}\" as female name, \"{}\" ".format( syllable.split(" ")[i], female_syllablesT[i])
+                    expression_res += temp
+            for item in expression_res:
+                item[0] = ''.join(item[0])
+            #print("expression_res", expression_res)
+            #print("translation:", translation)
+            return expression_res
     
-    def merge(self, translatedSpec: list, translatedGen: str) -> str:
+    def merge(self, translatedSpec: list, translatedGen: str, originalGen: str) -> list:
         '''
         Merge the translated specific and generic name.
 
@@ -206,11 +240,68 @@ class GeoTranslator():
             例如：'伦敦皇家俱乐部'，'富士山'
             
         '''
+        #print("translatedGen", translatedGen)
         idx_gen = translatedSpec.index(GEN_TOKEN)
-        left_part = ''.join(translatedSpec[:idx_gen])
-        right_part = ''.join(translatedSpec[idx_gen + 1:])
-        name = right_part + left_part + translatedGen
-        return name
+        left_part = translatedSpec[:idx_gen]
+        right_part = translatedSpec[idx_gen + 1:]
+        if len(left_part) == 1:
+            left_part = left_part[0]
+        if len(right_part) == 1:
+            right_part = right_part[0]
+        #print("left:", left_part, "right", right_part)
+        names = []
+        final_res = []
+        for left_item in left_part:
+            for right_item in right_part:
+                names.append([left_item[0] + right_item[0], left_item[1] + right_item[1]])
+        #print("names:", names)
+        for name in names:
+            if name[0][0:3] == "弗/夫" or name[0][0:3] == "东/栋" or \
+                    name[0][0:3] == "西/锡" or name[0][0:3] == "南/楠":
+                init = name[0][2]
+                name[0] = init + name[0][2:]
+            if name[0][-3:] == "海/亥":
+                if translatedGen == "":
+                    name[0] = name[0][0:-3] + "亥"
+            res = [""]
+            pairs = []
+            rests = []
+            pos = 0
+            for i in range(0, len(name[0])):
+                if name[0][i] == '/':
+                    pairs.append((name[0][i - 1], name[0][i + 1]))
+                    rests.append(name[0][pos: i - 1])
+                    pos = i + 2
+            rests.append(name[0][pos: len(name[0])])
+            for pair_num in range(0, len(pairs)):
+                for res_num in range(0, len(res)):
+                    res[res_num] += rests[pair_num]
+                temp = copy.deepcopy(res)
+                for res_num in range(0, len(res)):
+                    res[res_num] += pairs[pair_num][0]
+                for temp_num in range(0, len(temp)):
+                    temp[temp_num] += pairs[pair_num][1]
+                res += temp
+            for res_num in range(0, len(res)):
+                res[res_num] += rests[len(pairs)]
+                res[res_num] = [res[res_num], name[1]]
+            #print("rests", rests)
+            #print("res", res)
+            all_genT = translatedGen.split("/")
+            temp = copy.deepcopy(res)
+            res = []
+            for genT in all_genT:
+                for item in temp:
+                    if genT != "":
+                        expression = item[1] + "assuming {} as a general name {}".format(originalGen, genT)
+                    else:
+                        expression = item[1]
+                    res.append([item[0] + genT, expression])
+            final_res += res
+            #print("res", res)
+
+        #print("final_res", final_res)
+        return final_res
     
     def run(self, inputNames: list) -> list:
         '''
@@ -230,10 +321,12 @@ class GeoTranslator():
         names = self.preprocess(inputNames)
         results = []
         for name in names:
-            spec, genT = self.nameSplit(name)
+            spec, genT, gen = self.nameSplit(name)
+            #print("spec:", spec, "genT:", genT, "gen:", gen)
+            #print("genT", genT)
             specT = self.specTranslate(spec)
-            results.append(self.merge(specT, genT))
-        
+            #print("specT:", specT)
+            results.append(self.merge(specT, genT, gen))
         return results
 
 

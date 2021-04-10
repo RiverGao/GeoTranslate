@@ -20,8 +20,10 @@ inputNames = readData()
 # 输出结果
 results = translator.run(inputNames)
 # 打印结果
-print(inputNames)
-print(results)
+
+for i in range(0, len(results)):
+    print(inputNames[i])
+    print(results[i])
 # 保存结果
 # saveData(results)
     

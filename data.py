@@ -8,7 +8,7 @@ Created on Sun Mar  7 23:45:14 2021
 def readData():
     # 读取要翻译的英文
     # TODO: implement
-    data = ['Greenfield', 'Snow Hill', 'Great Island', 'Lander Country',
+    data = ['Glenfield', 'Snow Hill', 'Great Island', 'Lander Country',
             'Indian Peak', 'Lake Michigan', 'Royal Park of London City'
             , 'born']
     return data

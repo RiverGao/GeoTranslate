@@ -9,7 +9,15 @@ from config import GEN_TOKEN
 
 import eng_to_ipa as ipa
 
+import torch
+from nmt_model import NMT
+import sys
+import nltk
+from vocab import Vocab
+
+CUDA = torch.cuda.is_available()
 word_ipa_dict = {}
+
 class Splitor():
     # xxxSplitor 的父类
     def __init__(self, table):
@@ -104,6 +112,44 @@ class unitSplitor(Splitor):
         return ret
 
 class syllableSplitor(Splitor):
+    def __init__(self, table):
+        super(syllableSplitor, self).__init__(table)
+        # print("load model from {}".format(model_path), file=sys.stderr)
+        # self.vocab = Vocab.load('vocab.json')
+        self.nmt_model = NMT.load('model.bin')
+        if CUDA:
+            self.nmt_model = self.nmt_model.to(torch.device("cuda:0"))
+        self.nmt_model.eval()
+    def predict(self, unit: list)->str:
+        '''
+        预测未登录词的 ipa 音标，需要逐单词翻译成音标
+
+        Parameters
+        ----------
+        unit: List[str]
+            专名单元，由一个或多个单词组成。
+            每个单词都是小写全拼，可以含有 a-z，单引号和连字符
+
+        Returns
+        -------
+        str
+            ipa 音标
+
+        '''
+        words = unit.split() # 按空格分成单个单词
+        ipas = [] # 每个单词对应一个音标
+        for word in words:
+            sent = ' '.join(word).split()
+            hyps = self.nmt_model.beam_search(sent) # beam search 的 5 个结果
+            pred = hyps[0].value # 取可能性最高的
+            # 去掉重音记号
+            for mark in ['ˈ', 'ˌ']:
+                if mark in pred:
+                    pred.remove(mark)
+            ipas.append(''.join(pred)) # 保存音标
+        result = ' '.join(ipas) # 与 ipa_convert 返回格式保持一致
+        return result
+
     def split(self, unit: str) -> tuple:
         '''
         将专名单元按音节拆分
@@ -135,8 +181,21 @@ class syllableSplitor(Splitor):
                 word_ipa_dict[unit] = ipa.convert(unit, stress_marks='none')
                 #print(word_ipa_dict)
                 return ret
-            else:
-                raise ValueError('Cannot convert unit "{}" to IPA'.format(unit))
+            else: # 正常情况
+                # 跳过附录 C，只进行单词到音标的转换
+                ret = ([], [])
+                can_convert = ipa.isin_cmu(unit)
+                if can_convert:
+                    ret[0].append(unit)
+                    ret[1].append(ipa.convert(unit, stress_marks='none'))
+                    word_ipa_dict[unit] = ipa.convert(unit, stress_marks='none')
+                    #print(word_ipa_dict)
+                    return ret
+                else: # 用模型预测音标
+                    # raise ValueError('Cannot convert unit "{}" to IPA'.format(unit))
+                    ret[0].append(unit)
+                    ret[1].append(self.predict(unit))
+                    return ret
 
 class phoneticSplitor(Splitor):
     leadings = ['b', 'p', 'd', 't', 'g', 'k', 'v', 'w', 'f',

@@ -20,10 +20,11 @@ inputNames = readData()
 # 输出结果
 results = translator.run(inputNames)
 # 打印结果
+for src, trans in zip(inputNames, results):
+    print('原单词：{}'.format(src))
+    for i in range(len(trans)):
+        print('翻译 {}: {}，原因：{}'.format(i+1, trans[i][0], trans[i][1]))
 
-for i in range(0, len(results)):
-    print(inputNames[i])
-    print(results[i])
 # 保存结果
 # saveData(results)
     

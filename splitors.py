@@ -28,16 +28,19 @@ class nameSplitor(Splitor):
         Returns
         -------
         list
-            [0]: list, 专名单词列表，包含 GEN_TOKEN
-            [1]: str, 通名，可能为空字符串
+            [0]: int，主要通名在单词序列中的位置
+            [1]: list，所有通名以及他们的翻译
+            [3]: list，单词序列（英文）
 
         '''
         words = name.split() # 单词的列表
         possible_gen_idx = [] # indices of possible generic names
+        possible_gen = []
         ret = [None, None, None] # 返回的列表
         for i in range(len(words)):
             if self.table.inTable(words[i]):
                 possible_gen_idx.append(i)
+                possible_gen.append(words[i])
                 
         def naiveChoose(src_words: list, possibles: list)-> int:
             # 朴素的确认通名的方法
@@ -55,18 +58,19 @@ class nameSplitor(Splitor):
                     return  possibles[-1]
                 
         idx_gen = naiveChoose(words, possible_gen_idx)
+        #print("words:", words, "idx_gen:", idx_gen, "possible_gen:", possible_gen)
         if idx_gen == -1:
             # raise ValueError('Cannot find generic name in "{}"'.format(name))
             # 认为没有通名
-            ret[1] = ''
-            words.append(GEN_TOKEN)
+            ret[1] = []
         else:
-            ret[2] = words[idx_gen]
-            ret[1] = self.table.lookup(words[idx_gen]) # 顺便翻译
-            words[idx_gen] = GEN_TOKEN # 标记原来通名所在的位置
-            # 原因：当 unit 不止两个时，需要知道通名的位置，以确定专名的排列顺序
-        
-        ret[0] = words
+            ret[1] = []
+            for i in possible_gen:
+                ret[1].append((i, self.table.lookup(i)))
+        #print(idx_gen)
+        ret[0] = idx_gen
+        ret[2] = words
+        #print("ret", ret)
         return ret
 
 class unitSplitor(Splitor):
@@ -77,7 +81,7 @@ class unitSplitor(Splitor):
         Parameters
         ----------
         name : list
-            含有 GEN_TOKEN 的专名单词列表
+            英文单词列表
 
         Returns
         -------
@@ -139,7 +143,7 @@ class phoneticSplitor(Splitor):
                 'z', 'dz', 'ts', 's', 'ð', 'θ', 'ʒ', 'ʃ', 'ʤ',
                 'ʧ', 'h', 'm', 'n', 'l', 'r', 'j', 'gw',
                 'kw', 'hw']
-    followings = ['æ', 'ɑ', 'ʌ', 
+    followings = ['æ', 'ɑ', 'ʌ', 'a',
                   'ɛ', 'eɪ', 
                   'ə', 
                   'i', 'ɪ',

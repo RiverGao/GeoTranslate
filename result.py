@@ -27,23 +27,19 @@ class Result():
                     if ch == '/':
                         count -= 2
             return count
-        section_res = [["", ""], ]
         #print(self.specT)
         #print(section)
-        for i in range(0, len(section)):
-            word = section[i]
-            if i + 1 < len(section) and section[i + 1] == "of":
-                word += " of"
-            if word == "of":
-                continue
-            w_spec = self.specT[word]
-            #print("w_spec", w_spec)
-            if i == 0 and isInit == True:
+
+        def multiRes(w_spec: list, is_init: bool, is_back: bool)->list:
+            '''
+            对每个单词内部的"/"进行解析，产生的结果作为返回值
+            '''
+            if is_init == True:
                 if w_spec[0:3] == "弗/夫" or w_spec[0:3] == "东/栋" or \
                         w_spec[0:3] == "西/锡" or w_spec[0:3] == "南/楠":
                     init = w_spec[2]
                     w_spec = init + w_spec[3:]
-            elif i == len(section) - 1 and isBack == True:
+            elif is_back == True:
                 if w_spec[-3:] == "海/亥":
                     w_spec = w_spec[0:-3] + "亥"
             pairs = []
@@ -70,16 +66,24 @@ class Result():
                 res += temp
             for res_num in range(0, len(res)):
                 res[res_num] += rests[len(pairs)]
-            w_spec = res
+            return res
+
+        section_res = [["", ""], ]
+        #print(section, section[0])
+        if len(section) > 0 and section[0] == 'the':
+            section = section[1:]
+        for i in range(0, len(section)):
+            word = section[i]
+            if i + 1 < len(section) and section[i + 1] == "of":
+                word += " of"
+            if word == "of":
+                continue
+            w_spec = self.specT[word]
             #print("w_spec", w_spec)
-            female_res = copy.deepcopy(section_res)
-            #print("femaleT", self.femaleT)
-            if word in self.femaleT:
-                for item in female_res:
-                    item[0] += self.femaleT[word]
-                    item[1] += "female: {} -> {} ".format(word, self.femaleT[word])
-            else:
-                female_res = []
+            is_init = (i == 0 and isInit == True)
+            is_back = (i == len(section) - 1 and isBack == True)
+            w_spec = multiRes(w_spec, is_init, is_back)
+
             gen_res = []
             if needGen == True and word in self.genT:
                 res = copy.deepcopy(section_res)
@@ -89,9 +93,11 @@ class Result():
                         seq[0] += item
                         seq[1] += "generic: {} -> {} ".format(word, item)
                     gen_res += temp_res
+
             add_hyphen = False
             if countChineseCharactors() > 8 and i == 1 and \
-                    section[i] != "with" and section[i] != "and":
+                    section[i] != "with" and section[i] != "and" and \
+                    needGen == False:
                 add_hyphen = True
             #print(i, add_hyphen)
             spec_res = []
@@ -107,6 +113,23 @@ class Result():
                     #print("seq", seq)
                 spec_res += temp_res
             #print(spec_res, female_res, gen_res)
+
+            female_res = []
+            # print("femaleT", self.femaleT)
+            if word in self.femaleT:
+                w_female = self.femaleT[word]
+                is_init = (i == 0 and isInit == True)
+                is_back = (i == len(section) - 1 and isBack == True)
+                w_female = multiRes(w_female, is_init, is_back)
+                for item in w_female:
+                    temp_res = copy.deepcopy(res)
+                    for seq in temp_res:
+                        seq[0] += item
+                        seq[1] += "female: {} -> {} ".format(word, item)
+                    female_res += temp_res
+            else:
+                female_res = []
+
             section_res = spec_res + female_res + gen_res
         #print("section_res", section_res)
         return section_res

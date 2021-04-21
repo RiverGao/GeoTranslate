@@ -207,8 +207,8 @@ class phoneticSplitor(Splitor):
                   'ə', 
                   'i', 'ɪ',
                   'ɔ', 'o', 'əʊ', 'oʊ',
-                  'u', 
-                  'ju', 
+                  'u', 'ʊ',
+                  'ju', 'jʊ',
                   'aɪ', 
                   'aʊ',
                   'æn', 'an', 'ʌn', 'æŋ',
@@ -254,32 +254,52 @@ class phoneticSplitor(Splitor):
         for word in phon_list:
             _word = word # 对 _word 进行多次切除
             element_list = [] # 用来存储 (leading, following)
+            last_f = '' # 存储上一个 following，针对其以 n 结尾且之后是元音的情况
             while len(_word) > 0:
                 l = None # leading phonetic
                 f = None # following phonetic
-                head = _word[0] # 第一个音标
-                if head in self.leadings: # 如果以辅音开头
-                    l = head
-                    _word = _word[1:] # 切掉 head
-                else: # 检查是因为非法字符还是因为单独元音
-                    if head in self.followings:
-                        l = 'none'
-                    else:
-                        raise ValueError('Invalid leading phonetic: {}'.format(head))
+                heads = []
+                if len(_word) == 1:
+                    heads = [_word[0]]
+                elif len(_word) == 2:
+                    heads = [_word[:2], _word[0]]
+                else:
+                    heads = [_word[:3], _word[:2], _word[0]]
+                # 前三个，前两个或者第一个音标
+                for head in heads:
+                    if head in self.leadings: # 如果以辅音开头
+                        l = head
+                        _word = _word[len(head):] # 切掉 head
+                        break
+                    else: # 检查是因为非法字符还是因为单独元音
+                        if head in self.followings: # 单独元音
+                            if len(last_f) > 0 and last_f[-1] == 'n':
+                                l = 'n'
+                            else:
+                                l = 'none'
+                            break
+                else:
+                    raise ValueError('Invalid leading phonetic: {}'.format(head))
                 # 然后确定 following
-                # 先认为 leading 之后的都是，再一个个排除
-                tail = _word
-                while len(tail) > 0:
+                # 还是考虑前三个，前两个和第一个
+                tails = []
+                if len(_word) == 1:
+                    tails = [_word[0]]
+                elif len(_word) == 2:
+                    tails = [_word[:2], _word[0]]
+                else:
+                    tails = [_word[:3], _word[:2], _word[0]]
+                for tail in tails:
                     if tail in self.followings:
                         f = tail
+                        _word = _word[len(tail):] # 切掉找到的 following
                         break
-                    else:
-                        tail = tail[:-1] # 去掉最后一个音标
                 else: # 如果没找到 following，认为是单辅音
                     f = 'none'
                 
                 element_list.append((l, f)) # 存储找到的 l-f 对
-                _word = _word[len(tail):] # 切掉找到的 following
+                last_f = f # 存储 following
+                
             # 一个单词找完之后
             #ret_list.extend(element_list)
             #print("element_list:", element_list)

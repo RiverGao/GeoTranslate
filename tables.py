@@ -575,60 +575,6 @@ def initTables() -> list:
          'wash': "洼地/沼泽", 'water': "河/湾/海峡", 'waterfall': "瀑布", 'waterway': "水道",
          'well': "井", 'west': "西", 'western': "西/西部", 'wharf': "码头",
          'wold': "山地", 'wood': "林地"}
-
-    syllables = {'prefix':
-            {'bau': "鲍", 'baw': "鲍", 'bow': "鲍", 'bur': "伯", 'cau': "考",
-          'caw': "考", 'cow': "考", 'cur': "柯", 'daw': "道", 'down': "唐",
-          'dun': "邓", 'gau': "高", 'hun': "亨", 'kir': "柯", 'kirk': "柯克",
-          'lang': "兰", 'lau': "劳", 'law': "劳", 'llan': "兰", 'long': "朗",},
-          'suffix': 
-            {'baum': "鲍姆", 'berg': "伯格", 'berger': "伯格", 'berry': "伯里", 'bert': "伯特",
-          'bluff': "布拉夫", 'bone': "伯恩", 'borg': "堡", 'born': "本", 'borne': "本",
-          'boro': "伯勒", 'borough': "伯勒", 'bourn': "本", 'bourne': "本", 'brandt': "布兰特",
-          'bridge': "布里奇", 'bright': "布赖特", 'brook': "布鲁克", 'brooke': "布鲁克", 'brough': "伯勒",
-          'burg': "堡", 'burger': "伯格", 'burgh': "堡", 'burn': "本", 'burne': "本",
-          'burrough': "伯勒", 'burton': "伯顿", 'bury': "伯里", 'by': "比", 'caster': "克斯特",
-          'cau': "考", 'caw': "考", 'cham': "彻姆", 'chapel': "查珀尔", 'chard': "查德",
-          'chester': "切斯特", 'child': "柴尔德", 'church': "彻奇", 'cius': "修斯", 'comb': "科姆",
-          'combe': "科姆", 'corner': "科纳", 'cough': "克夫", 'cour': "库尔", 'cow': "考",
-          'croft': "克罗夫特", 'dale': "代尔", 'dall': "德尔", 'dam': "丹", 'deau': "多",
-          'dell': "德尔", 'den': "登", 'deus': "迪厄斯", 'dge': "奇", 'dham': "德姆",
-          'dius': "迪厄斯", 'don': "登", 'dorf': "多夫", 'dow': "道", 'down': "当",
-          'downe': "当", 'ds': "兹", 'dz': "兹", 'feld': "费尔德", 'felt': "费尔特",
-          'field': "菲尔德", 'ford': "福德", 'fort': "福特", 'forth': "福斯", 'fus': "弗斯",
-          'gan': "根", 'gate': "盖特", 'ge': "奇", 'gham': "汉", 'grave': "格雷夫",
-          'grove': "格罗夫", 'haus': "豪斯", 'hausen': "豪森", 'haven': "黑文", 'head': "黑德",
-          'horn': "霍恩", 'house': "豪斯", 'hull': "赫尔", 'hurst': "赫斯特", 'kall': "科尔",
-          'kamp': "坎普", 'key': "基", 'lain': "莱恩", 'land': "兰", 'lander': "兰德",
-          'lau': "劳", 'law': "劳", 'lay': "利", 'ledge': "利奇", 'leigh': "利",
-          'lein': "莱恩", 'ler': "勒", 'less': "利斯", 'lett': "利特", 'lette': "利特",
-          'ley': "利", 'lock': "洛克", 'ly': "利", 'main': "梅恩", 'man': "曼",
-          'mann': "曼", 'mayer': "迈耶", 'meier': "迈耶", 'men': "门", 'mer': "默",
-          'mere': "米尔", 'meyer': "迈耶", 'mont': "蒙特", 'more': "莫尔", 'mount': "芒特",
-          'mouth': "茅斯", 'nall': "纳尔", 'nan': "南", 'nel': "内尔", 'nen': "嫩",
-          'ner': "纳", 'ness': "内斯", 'nette': "内特", 'ney': "尼", 'night': "奈特",
-          'nius': "尼厄斯", 'non': "嫩", 'nutt': "纳特", 'paugh': "波", 'pert': "珀特",
-          'plain': "普莱恩", 'pool': "浦", 'port': "波特", 'que': "克", 'quist': "奎斯特",
-          'rain': "雷恩", 'ral': "勒尔", 'rand': "兰德", 'ridge': "里奇", 'rol': "勒尔",
-          'sad': "赛德", 'sall': "索尔", 'say': "赛", 'schmidt': "施米特", 'sen': "森",
-          'sett': "西特", 'sette': "塞特", 'sey': "西", 'shall': "歇尔", 'sham': "舍姆",
-          'shaw': "肖", 'shell': "谢尔", 'ship': "希普", 'shire': "希尔", 'side': "赛德",
-          'sion': "申", 'sius': "修斯", 'smith': "史密斯", 'son': "森", 'spring': "斯普林",
-          'springs': "斯普林斯", 'stadt': "施塔特", 'stair': "斯泰尔", 'stan': "斯坦", 'stane': "斯坦",
-          'stead': "斯特德", 'sted': "斯特德", 'stedt': "施泰特", 'stine': "斯坦", 'stone': "斯通",
-          'stowe': "斯托", 'strong': "斯特朗", 'sure': "热", 'table': "泰布尔", 'tain': "廷",
-          'tall': "托尔", 'tch': "奇", 'ten': "滕", 'teus': "蒂厄斯", 'tham': "瑟姆",
-          'then': "森", 'thian': "西恩", 'thorn': "索恩", 'thorp': "索普", 'thorpe': "索普",
-          'thur': "瑟", 'tian': "琴", 'tion': "申", 'tius': "修斯", 'ton': "顿",
-          'tone': "通", 'tow': "托", 'town': "敦", 'ts': "茨", 'tz': "茨",
-          'vale': "韦尔", 'ville': "维尔", 'vin': "文", 'waite': "韦特", 'wale': "韦尔",
-          'wall': "沃尔", 'ward': "沃德", 'water': "沃特", 'way': "韦", 'weil': "韦尔",
-          'well': "韦尔", 'wen': "温", 'white': "怀特", 'wick': "威克", 'will': "威尔",
-          'win': "温", 'wirth': "沃斯", 'witz': "威茨", 'wood': "伍德", 'worth': "沃斯",
-          'worthy': "沃西", 'wright': "赖特", 'xius': "修斯", 'yard': "亚德", 'yer': "耶",
-          'zen': "曾", 'zer': "泽"}
-           }
-    '''
     syllables = {'prefix':
                      {'bau': ("鲍", 1), 'baw': ("鲍", 1), 'bow': ("鲍", 1), 'bur': ("伯", 2), 'cau': ("考", 1),
                       'caw': ("考", 1), 'cow': ("考", 1), 'cur': ("柯", 2), 'daw': ("道", 1), 'down': ("唐", 1),
@@ -681,8 +627,28 @@ def initTables() -> list:
                       'worthy': ("沃西", 3), 'wright': ("赖特", 2), 'xius': ("修斯", 2), 'yard': ("亚德", 3), 'yer': ("耶", 2),
                       'zen': ("曾", 1), 'zer': ("泽", 2)}
                  }
-    '''
-    units = dict()
+    units = {'Abraham': "亚伯拉罕", 'Albert': "艾伯特", 'Alexander': "亚历山大", 'Alexandria': "亚历山德里亚",
+             'Anna': "安娜", 'Anne': "安妮", 'Annetta': "安妮塔", 'Annette': "安妮特", 'Anton': "安东",
+             'Augusta': "奥古斯塔", 'Bishop': "毕晓普", 'Boston': "波士顿", 'Bowman': "鲍曼", 'Broughton': "布劳顿",
+             'Brown': "布朗", 'Charles': "查尔斯", 'Christian': "克里斯琴", 'Davis': "戴维斯", 'Dickens': "狄更斯",
+             'Donna': "唐娜", 'Douglas': "道格拉斯", 'Dupont': "杜邦", 'Edinburg': "爱丁堡", 'Edison': "爱迪生",
+             'Edward': "爱德华", 'Elizabeth': "伊丽莎白", 'Erwin': "欧文", 'Fayette': "费耶特", 'Francis': "弗朗西斯",
+             'Franklin': "富兰克林", 'George': "乔治", 'Grant': "格兰特", 'Hamilton': "哈密尔顿", 'Harris': "哈里斯", 
+             'Hastings': "黑斯廷斯", 'Hazel': "黑泽尔", 'Helena': "海伦娜", 'Henderson': "亨德森", 'Henry': "亨利",
+             'Howard': "霍华德", 'Irvine': "欧文", 'Irwin': "欧文", 'Isabella': "伊莎贝拉", 'Jack': "杰克",
+             'Jackson': "杰克逊", 'James': "詹姆斯", 'Janet': "珍妮特", 'Jansen': "詹森", 'Jasper': "贾斯珀",
+             'Jefferson': "杰斐逊", 'Jenner': "詹纳", 'John': "约翰", 'Johnson': "约翰逊", 'Jones': "琼斯",
+             'Katherine': "凯瑟琳", 'Katrine': "卡特琳", 'Lafayette': "拉斐特", 'Lawrence': "劳伦斯", 'Lewis': "刘易斯",
+             'Lincoln': "林肯", 'Louis': "路易斯", 'Louisa': "路易莎", 'Louise': "路易丝", 'Madison': "麦迪逊",
+             'Martin': "马丁", 'Mary': "玛丽", 'Macdonald': "麦克唐纳", 'Michel': "米歇尔", 'Monroe': "门罗",
+             'Morgan': "摩根", 'Nelson': "纳尔逊", 'Newton': "牛顿", 'Nicolas': "尼古拉斯", 'Nina': "尼娜",
+             'Nottingham': "诺丁汉", 'Orange': "奥兰治", 'Owen': "欧文", 'Paul': "保罗", 'Peter': "彼得",
+             'Polk': "波克", 'Powell': "鲍威尔", 'Powers': "鲍尔斯", 'Quincy': "昆西", 'Richard': "理查德",
+             'Richardson': "理查森", 'Richmond': "里士满", 'Roberts': "罗伯茨", 'Robinson': "鲁滨逊",
+             'Roosevelt': "罗斯福", 'Rosalia': "罗萨莉娅", 'Russell': "拉塞尔", 'Smith': "史密斯", 'Somerset': "萨默塞特",
+             'Taft': "塔夫脱", 'Taylor': "泰勒", 'Thomas': "托马斯", 'Thompson': "汤普森", 'Thomsom': "汤姆森",
+             'Tom': "汤姆", 'Toms': "汤姆斯", 'Victoria': "维多利亚", 'Washington': "华盛顿", 'William': "威廉",
+             'Williams': "威廉斯", 'Wilson': "威尔逊", 'Yale': "耶鲁", 'Yates': "耶茨"}
     tables = []
     tables.append(generics)
     tables.append(units)
@@ -737,7 +703,7 @@ class genericTable(Table):
         super(genericTable, self).__init__(tableData)
 
 class unitTable(Table):
-    # 专名单元的英文-中文字典（暂时不用）
+    # 专名单元的英文-中文字典
     def __init__(self, tableData):
         # TODO: implement
         super(unitTable, self).__init__(tableData)
@@ -747,6 +713,19 @@ class syllableTable(Table):
     def __init__(self, tableData):
         # TODO: implement
         super(syllableTable, self).__init__(tableData)
+    def inTable(self, key: str, is_prefix: bool) -> bool:
+        if is_prefix == True and key in self.data['prefix']:
+            return True
+        if is_prefix == False and key in self.data['suffix']:
+            return True
+        return False
+
+
+    def lookup(self, key: str, is_prefix: bool) -> tuple:
+        if is_prefix == True:
+            return self.data['prefix'][key]
+        if is_prefix == False:
+            return self.data['suffix'][key]
 
 class phoneticTable(Table):
     # 音标的英文-中文字典（就是那个大表格）
@@ -799,35 +778,3 @@ class phoneticTable(Table):
             return common + " " + female
         else:
             return common
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

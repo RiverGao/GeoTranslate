@@ -49,6 +49,7 @@ class GeoTranslator():
             # 全部化成小写并去除空格
             # TODO: 可能需要进一步处理
             _name = name.strip().lower()
+            _name = _name.replace("'s", "")
             processed.append(_name)
         return processed
     

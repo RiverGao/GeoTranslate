@@ -184,13 +184,37 @@ class GeoTranslator():
         for syllable, phonetic in zip(syllables, phonetics):
             # 此处的 phonetic 是音节对应的音标片段
             #print("syllable", syllable, "phonetic", phonetic)
-            if self.syllableTable.inTable(syllable): # 音节在表内
-                new_word = self.syllableTable.lookup(syllable)
+            syllable_cap = syllable.capitalize()
+            if syllable == "with" or syllable == "and":
+                syllablesT += "-"
+                female_syllablesT += "-"
+            elif self.unitTable.inTable(syllable_cap): # 音节在表内
+                new_word = self.unitTable.lookup(syllable_cap)
                 syllablesT += new_word
                 female_syllablesT += new_word
                 
             else: # 音节不在表内
                 singlePhonetics = self.phoneticSplit(phonetic) # 拆分成单音标的列表
+                #print(singlePhonetics)
+                # 4.16.2021
+                front_part = ""
+                prefix = ""
+                prefix_len = 0
+                for letter in syllable:
+                    front_part += letter
+                    if self.syllableTable.inTable(front_part, True):
+                        prefix, prefix_len = self.syllableTable.lookup(front_part, True)
+                syllable_length = len(syllable)
+                back_part = ""
+                suffix = ""
+                suffix_len = 0
+                for i in range(1, syllable_length + 1):
+                    back_part  = syllable[-i] + back_part
+                    if self.syllableTable.inTable(back_part, False):
+                        suffix, suffix_len = self.syllableTable.lookup(back_part, False)
+                singlePhonetics[0] = singlePhonetics[0][prefix_len: len(singlePhonetics[0]) - suffix_len]
+                #最好改一下
+                #4.16.2021
                 #print("singlePhonetics:", singlePhonetics)
                 for word in singlePhonetics:
                     phonesT = []  # 存储各个音标的翻译
@@ -209,6 +233,9 @@ class GeoTranslator():
                         femaleT += lst[-1]
                     syllablesT += wordT
                     female_syllablesT += femaleT
+                #4.16.2021
+                syllablesT = prefix + syllablesT + suffix
+                female_syllablesT = prefix + female_syllablesT + suffix
         #print("syllablesT:", syllablesT)
         #print("female_syllablesT", female_syllablesT)
         return (syllablesT, female_syllablesT)
@@ -237,29 +264,3 @@ class GeoTranslator():
             res.merge()
             results.append(res.getRes())
         return results
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

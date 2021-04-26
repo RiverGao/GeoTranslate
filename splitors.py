@@ -282,12 +282,12 @@ class phoneticSplitor(Splitor):
                     raise ValueError('Invalid leading phonetic: {}'.format(head))
                 # 然后确定 following
                 # 还是考虑前三个，前两个和第一个
-                tails = []
+                tails = [] # 注意 _word 此时长度可能为 0
                 if len(_word) == 1:
                     tails = [_word[0]]
                 elif len(_word) == 2:
                     tails = [_word[:2], _word[0]]
-                else:
+                elif len(_word) > 2:
                     tails = [_word[:3], _word[:2], _word[0]]
                 for tail in tails:
                     if tail in self.followings:

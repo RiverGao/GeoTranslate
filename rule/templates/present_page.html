@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GeoTranslate-Demo</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+
+<script>
+
+function myFunction() {
+var text1= $('#text1').val();
+  $.ajax({
+              url: "/join",
+              type: "POST",
+              data: {text1:text1}
+
+          }).done(function(response) {
+
+            var html= "";
+
+            response =response.result;
+                 $.each(response,function(key,val){
+                 console.log(val);
+                    html+="<p style='text-align:left;font-size:20px;'>"+val+"</p>"
+
+                });
+                html +="<br>";
+                $(".show-data").html(html);
+            });
+};
+
+  </script>
+<body>
+    <h1 style="text-align:center;">英文地理名词翻译系统-v0.0</h1>
+    <p style="text-align:center;font-size:24px;">
+        输入英文地名并点击按钮即可翻译<br><br>
+        <label for="src" style="font-size:24px;">地名:</label>
+        <input type="text" id="text1" name="text1" style="text-align:center;width:300px;height:36px;font-size:20px;"><br><br>
+        <button id="clicked" onclick="myFunction()" style="height:50px;width:150px;font-size:20px;">翻译</button>
+    </p>
+    <p style="text-align:center;font-size:24px;"> <b> 翻译结果： </b></p>
+    <div class="show-data" style="text-align:left;border:1px solid black;margin:0 auto;width:40%;margin:auto;white-space: pre-wrap;">
+
+    </div>
+</body>
+</html>

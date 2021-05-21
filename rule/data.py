@@ -5,13 +5,18 @@ Created on Sun Mar  7 23:45:14 2021
 @author: 高长江
 """
 
-def readData():
+def readData(filename):
     # 读取要翻译的英文
-    # TODO: implement
-    data = ['Glenfield', 'Snow Hill', 'Great Island', 'Lander Country',
-            'Indian Peak', 'Lake Michigan', 'Royal Park of London City'
-            , 'Sea Mountain', 'New Loop', 'New Hill', 'Proof SnowWhite Mountain']
-    return data
+    lines = []
+    with open(filename, 'r') as f:
+        lines = f.read().splitlines()
+    return lines
+
+def printResult(inputs, results):
+    for src, trans in zip(inputs, results):
+        print('原单词：{}'.format(src))
+        for i in range(len(trans)):
+            print('翻译 {}: {}，原因：{}'.format(i+1, trans[i][0], trans[i][1]))
 
 def saveData(saveDIR):
     # save the translated geographical names into saveDIR

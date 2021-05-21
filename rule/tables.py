@@ -31,7 +31,7 @@ def initTables() -> list:
         for row in reader:
             female[(row[0], row[1])] = row[2]
     generics = {}
-    with open('generics.csv', 'r', encoding='ansi') as f:
+    with open('generics.csv', 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         for row in reader:
             generics[row[0]] = row[1]
@@ -40,12 +40,12 @@ def initTables() -> list:
         reader = csv.reader(f)
         for row in reader:
             units[row[0]] = row[1]
-    with open('big_dict.csv', 'r', encoding='ansi') as f:
+    with open('big_dict.csv', 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         for row in reader:
             units[row[1]] = row[3]
     adj_generics = {}
-    with open('adj.csv', 'r', encoding='ansi') as f:
+    with open('adj.csv', 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
         for row in reader:
             adj_generics[row[0]] = row[1]
@@ -75,7 +75,7 @@ class Table():
     def __init__(self, tableData):
         # tableData 是一个字典
         self.data = tableData
-    
+
     def inTable(self, key: str) -> bool:
         '''
         Checkout whether a key (source) is in the table
@@ -92,7 +92,7 @@ class Table():
 
         '''
         return (key in self.data)
-    
+
     def lookup(self, key: str) -> str:
         '''
         Lookup the value (translation) of given key (source)

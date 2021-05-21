@@ -31,7 +31,9 @@
 ```
 $ python3 rules/main.py [input file]
 ```
-其中 `[input file]` 是输入文件名。程序就会输出所有翻译。
+其中 `[input file]` 是输入文件名。程序就会输出所有翻译。 若未指定输入文件，程序会默认读取自带的 `examples.txt`，输出如下（部分）：
+
+![image](https://user-images.githubusercontent.com/56507857/119115779-207fc700-ba5a-11eb-8623-1ae8b6021db0.png)
 
 ### 3. 作为 API
 若要在其他 Python 程序中导入此工具，首先需要安装 pytorch 和 docopt 库，并下载此项目。下载安装完成后，在目标 python 文件中导入：

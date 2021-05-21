@@ -5,7 +5,7 @@ Created on Sun Mar  7 22:57:43 2021
 @author: 高长江
 """
 from rule.model import GeoTranslator
-from rule.data import readData, saveData
+from rule.data import readData, printResult, saveData
 from rule.tables import initTables
 
 
@@ -16,14 +16,11 @@ tableData = initTables()
 # 初始化翻译器
 translator = GeoTranslator(tableData)
 # 输入要翻译的内容
-inputNames = readData()
+inputNames = readData('examples.txt')
 # 输出结果
 results = translator.run(inputNames)
 # 打印结果
-for src, trans in zip(inputNames, results):
-    print('原单词：{}'.format(src))
-    for i in range(len(trans)):
-        print('翻译 {}: {}，原因：{}'.format(i+1, trans[i][0], trans[i][1]))
+printResult(inputNames, results)
 
 # 保存结果
 # saveData(results)

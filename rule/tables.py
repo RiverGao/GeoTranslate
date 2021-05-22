@@ -5,6 +5,11 @@ Created on Sun Mar  7 23:45:26 2021
 @author: 高长江
 """
 import csv
+import os
+
+
+CWD = os.path.dirname(__file__)
+RESOURCE_DIR = CWD+'/resources/'
 
 
 def initTables() -> list:
@@ -22,41 +27,41 @@ def initTables() -> list:
 
     """
     phonetics = {}
-    with open("phonetics.csv", "r", encoding="utf-8") as f:
+    with open(RESOURCE_DIR + "phonetics.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         for row in reader:
             phonetics[(row[0], row[1])] = row[2]
     female = {}
-    with open("female.csv", "r", encoding="utf-8") as f:
+    with open(RESOURCE_DIR + "female.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         for row in reader:
             female[(row[0], row[1])] = row[2]
     generics = {}
-    with open("generics.csv", "r", encoding="utf-8") as f:
+    with open(RESOURCE_DIR + "generics.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         for row in reader:
             generics[row[0]] = row[1]
     units = {}
-    with open("units.csv", "r", encoding="utf-8") as f:
+    with open(RESOURCE_DIR + "units.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         for row in reader:
             units[row[0]] = row[1]
-    with open("big_dict.csv", "r", encoding="utf-8") as f:
+    with open(RESOURCE_DIR + "big_dict.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         for row in reader:
             units[row[1]] = row[3]
     adj_generics = {}
-    with open("adj.csv", "r", encoding="utf-8") as f:
+    with open(RESOURCE_DIR + "adj.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         for row in reader:
             adj_generics[row[0]] = row[1]
     prefix = {}
-    with open("prefix.csv", "r", encoding="utf-8") as f:
+    with open(RESOURCE_DIR + "prefix.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         for row in reader:
             prefix[row[0]] = (row[1], row[2])
     suffix = {}
-    with open("suffix.csv", "r", encoding="utf-8") as f:
+    with open(RESOURCE_DIR + "suffix.csv", "r", encoding="utf-8") as f:
         reader = csv.reader(f)
         for row in reader:
             suffix[row[0]] = (row[1], row[2])

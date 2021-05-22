@@ -7,4 +7,4 @@ Created on Sat Mar 13 17:09:48 2021
 
 # Configuration file
 
-GEN_TOKEN = '[GENERIC]'
+GEN_TOKEN = "[GENERIC]"

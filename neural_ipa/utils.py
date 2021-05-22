@@ -17,6 +17,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import nltk
+
 # nltk.download('punkt')
 
 
@@ -53,11 +54,11 @@ def read_corpus(file_path, source):
         is of the source language or target language
     """
     data = []
-    for line in open(file_path, encoding='utf-8'):
+    for line in open(file_path, encoding="utf-8"):
         sent = nltk.word_tokenize(line)
         # only append <s> and </s> to the target sentence
-        if source == 'tgt':
-            sent = ['<s>'] + sent + ['</s>']
+        if source == "tgt":
+            sent = ["<s>"] + sent + ["</s>"]
         data.append(sent)
 
     return data
@@ -76,7 +77,7 @@ def batch_iter(data, batch_size, shuffle=False):
         np.random.shuffle(index_array)
 
     for i in range(batch_num):
-        indices = index_array[i * batch_size: (i + 1) * batch_size]
+        indices = index_array[i * batch_size : (i + 1) * batch_size]
         examples = [data[idx] for idx in indices]
 
         examples = sorted(examples, key=lambda e: len(e[0]), reverse=True)
@@ -84,4 +85,3 @@ def batch_iter(data, batch_size, shuffle=False):
         tgt_sents = [e[1] for e in examples]
 
         yield src_sents, tgt_sents
-

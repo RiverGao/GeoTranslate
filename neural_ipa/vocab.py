@@ -32,7 +32,6 @@ class VocabEntry(object):
     """ Vocabulary Entry, i.e. structure containing either
     src or tgt language terms.
     """
-
     def __init__(self, word2id=None):
         """ Init VocabEntry Instance.
         @param word2id (dict): dictionary mapping words 2 indices
@@ -41,11 +40,11 @@ class VocabEntry(object):
             self.word2id = word2id
         else:
             self.word2id = dict()
-            self.word2id["<pad>"] = 0  # Pad Token
-            self.word2id["<s>"] = 1  # Start Token
-            self.word2id["</s>"] = 2  # End Token
-            self.word2id["<unk>"] = 3  # Unknown Token
-        self.unk_id = self.word2id["<unk>"]
+            self.word2id['<pad>'] = 0   # Pad Token
+            self.word2id['<s>'] = 1 # Start Token
+            self.word2id['</s>'] = 2    # End Token
+            self.word2id['<unk>'] = 3   # Unknown Token
+        self.unk_id = self.word2id['<unk>']
         self.id2word = {v: k for k, v in self.word2id.items()}
 
     def __getitem__(self, word):
@@ -66,7 +65,7 @@ class VocabEntry(object):
     def __setitem__(self, key, value):
         """ Raise error, if one tries to edit the VocabEntry.
         """
-        raise ValueError("vocabulary is readonly")
+        raise ValueError('vocabulary is readonly')
 
     def __len__(self):
         """ Compute number of words in VocabEntry.
@@ -78,7 +77,7 @@ class VocabEntry(object):
         """ Representation of VocabEntry to be used
         when printing the object.
         """
-        return "Vocabulary[size=%d]" % len(self)
+        return 'Vocabulary[size=%d]' % len(self)
 
     def id2word(self, wid):
         """ Return mapping of index to word.
@@ -117,9 +116,7 @@ class VocabEntry(object):
         """
         return [self.id2word[w_id] for w_id in word_ids]
 
-    def to_input_tensor(
-        self, sents: List[List[str]], device: torch.device
-    ) -> torch.Tensor:
+    def to_input_tensor(self, sents: List[List[str]], device: torch.device) -> torch.Tensor:
         """ Convert list of sentences (words) into tensor with necessary padding for 
         shorter sentences.
 
@@ -129,7 +126,7 @@ class VocabEntry(object):
         @returns sents_var: tensor of (max_sentence_length, batch_size)
         """
         word_ids = self.words2indices(sents)
-        sents_t = pad_sents(word_ids, self["<pad>"])
+        sents_t = pad_sents(word_ids, self['<pad>'])
         sents_var = torch.tensor(sents_t, dtype=torch.long, device=device)
         return torch.t(sents_var)
 
@@ -144,14 +141,9 @@ class VocabEntry(object):
         vocab_entry = VocabEntry()
         word_freq = Counter(chain(*corpus))
         valid_words = [w for w, v in word_freq.items() if v >= freq_cutoff]
-        print(
-            "number of word types: {}, number of word types w/ frequency >= {}: {}".format(
-                len(word_freq), freq_cutoff, len(valid_words)
-            )
-        )
-        top_k_words = sorted(valid_words, key=lambda w: word_freq[w], reverse=True)[
-            :size
-        ]
+        print('number of word types: {}, number of word types w/ frequency >= {}: {}'
+              .format(len(word_freq), freq_cutoff, len(valid_words)))
+        top_k_words = sorted(valid_words, key=lambda w: word_freq[w], reverse=True)[:size]
         for word in top_k_words:
             vocab_entry.add(word)
         return vocab_entry
@@ -160,7 +152,6 @@ class VocabEntry(object):
 class Vocab(object):
     """ Vocab encapsulating src and target langauges.
     """
-
     def __init__(self, src_vocab: VocabEntry, tgt_vocab: VocabEntry):
         """ Init Vocab.
         @param src_vocab (VocabEntry): VocabEntry for source language
@@ -170,7 +161,7 @@ class Vocab(object):
         self.tgt = tgt_vocab
 
     @staticmethod
-    def build(src_sents, tgt_sents, vocab_size, freq_cutoff) -> "Vocab":
+    def build(src_sents, tgt_sents, vocab_size, freq_cutoff) -> 'Vocab':
         """ Build Vocabulary.
         @param src_sents (list[str]): Source sentences provided by read_corpus() function
         @param tgt_sents (list[str]): Target sentences provided by read_corpus() function
@@ -179,10 +170,10 @@ class Vocab(object):
         """
         assert len(src_sents) == len(tgt_sents)
 
-        print("initialize source vocabulary ..")
+        print('initialize source vocabulary ..')
         src = VocabEntry.from_corpus(src_sents, vocab_size, freq_cutoff)
 
-        print("initialize target vocabulary ..")
+        print('initialize target vocabulary ..')
         tgt = VocabEntry.from_corpus(tgt_sents, vocab_size, freq_cutoff)
 
         return Vocab(src, tgt)
@@ -191,12 +182,8 @@ class Vocab(object):
         """ Save Vocab to file as JSON dump.
         @param file_path (str): file path to vocab file
         """
-        json.dump(
-            dict(src_word2id=self.src.word2id, tgt_word2id=self.tgt.word2id),
-            open(file_path, "w", encoding="utf-8"),
-            indent=2,
-            ensure_ascii=False,
-        )
+        json.dump(dict(src_word2id=self.src.word2id, tgt_word2id=self.tgt.word2id),
+                  open(file_path, 'w', encoding='utf-8'), indent=2, ensure_ascii=False)
 
     @staticmethod
     def load(file_path):
@@ -204,9 +191,9 @@ class Vocab(object):
         @param file_path (str): file path to vocab file
         @returns Vocab object loaded from JSON dump
         """
-        entry = json.load(open(file_path, "r", encoding="utf-8"))
-        src_word2id = entry["src_word2id"]
-        tgt_word2id = entry["tgt_word2id"]
+        entry = json.load(open(file_path, 'r', encoding='utf-8'))
+        src_word2id = entry['src_word2id']
+        tgt_word2id = entry['tgt_word2id']
 
         return Vocab(VocabEntry(src_word2id), VocabEntry(tgt_word2id))
 
@@ -214,28 +201,21 @@ class Vocab(object):
         """ Representation of Vocab to be used
         when printing the object.
         """
-        return "Vocab(source %d words, target %d words)" % (
-            len(self.src),
-            len(self.tgt),
-        )
+        return 'Vocab(source %d words, target %d words)' % (len(self.src), len(self.tgt))
 
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     args = docopt(__doc__)
 
-    print("read in source sentences: %s" % args["--train-src"])
-    print("read in target sentences: %s" % args["--train-tgt"])
+    print('read in source sentences: %s' % args['--train-src'])
+    print('read in target sentences: %s' % args['--train-tgt'])
 
-    src_sents = read_corpus(args["--train-src"], source="src")
-    tgt_sents = read_corpus(args["--train-tgt"], source="tgt")
+    src_sents = read_corpus(args['--train-src'], source='src')
+    tgt_sents = read_corpus(args['--train-tgt'], source='tgt')
 
-    vocab = Vocab.build(
-        src_sents, tgt_sents, int(args["--size"]), int(args["--freq-cutoff"])
-    )
-    print(
-        "generated vocabulary, source %d words, target %d words"
-        % (len(vocab.src), len(vocab.tgt))
-    )
+    vocab = Vocab.build(src_sents, tgt_sents, int(args['--size']), int(args['--freq-cutoff']))
+    print('generated vocabulary, source %d words, target %d words' % (len(vocab.src), len(vocab.tgt)))
 
-    vocab.save(args["VOCAB_FILE"])
-    print("vocabulary saved to %s" % args["VOCAB_FILE"])
+    vocab.save(args['VOCAB_FILE'])
+    print('vocabulary saved to %s' % args['VOCAB_FILE'])

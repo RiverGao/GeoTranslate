@@ -46,7 +46,9 @@ from GeoTranslate.rule.tables import initTables
 tableData = initTables()
 translator = GeoTranslator(tableData)
 ```
-这样就可以使用 `translator.run(inputNames)` 进行翻译，其中 `inputNames` 是需要翻译的英文的列表。
+这样就可以使用 `translator.run(inputNames)` 进行翻译，其中 `inputNames` 是需要翻译的英文的列表。运行结果示例如下：
+
+![image](https://user-images.githubusercontent.com/56507857/119227601-4cc24300-bb41-11eb-8182-84de726842e3.png)
 
 ## 项目结构
 1. rule：规则部分。主要由 4 份规则表以及对应的 splitors 组成，代码见 rule/tables.py 和 rule/splitors.py。得到地理名词后，按照通名-专名、可翻译单元、音节、音标的次序依次拆分，并由 result.py 中的 result 类存储，最后输出多个翻译候选，以及对应的规则。

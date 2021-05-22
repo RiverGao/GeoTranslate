@@ -15,6 +15,11 @@ import sys
 import nltk
 from rule.vocab import Vocab
 
+import os
+
+CWD = os.path.dirname(__file__)
+PRD = os.path.dirname(CWD) # parent directory, i.e. GeoTranslate/
+
 CUDA = torch.cuda.is_available()
 word_ipa_dict = {}
 
@@ -133,7 +138,7 @@ class syllableSplitor(Splitor):
         super(syllableSplitor, self).__init__(table)
         # print("load model from {}".format(model_path), file=sys.stderr)
         # self.vocab = Vocab.load('vocab.json')
-        self.nmt_model = NMT.load("./neural_ipa/model.bin")
+        self.nmt_model = NMT.load(os.path.join(PRD, "neural_ipa", "model.bin"))
         if CUDA:
             self.nmt_model = self.nmt_model.to(torch.device("cuda:0"))
         self.nmt_model.eval()

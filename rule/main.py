@@ -9,13 +9,16 @@ from rule.data import readData, printResult, saveData
 from rule.tables import initTables
 
 import sys
+import os
+
+CWD = os.path.dirname(__file__)
 
 # 命令行需要指定输入文件，否则默认为 examples.txt
 inputFile = None
 if len(sys.argv) == 1:
     print("运行方式： python3 main.py [input file]")
     print("未指定文件，默认读取 examples.txt")
-    inputFile = "examples.txt"
+    inputFile = os.path.join(CWD, 'resources', 'examples.txt')
 elif len(sys.argv) == 2:
     inputFile = sys.argv[1]
 else:

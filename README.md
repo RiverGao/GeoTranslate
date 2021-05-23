@@ -36,10 +36,10 @@ $ python3 rules/main.py [input file]
 ![image](https://user-images.githubusercontent.com/56507857/119115779-207fc700-ba5a-11eb-8623-1ae8b6021db0.png)
 
 ### 3. 作为 API
-若要在其他 Python 程序中导入此工具，首先需要安装 pytorch 和 docopt 库，并下载此项目。下载安装完成后，在目标 python 文件导入：
+若要在其他 Python 程序中导入此工具，首先需要安装 pytorch 和 docopt 库，并下载此项目。下载安装完成后，在 GeoTranslate 目录下执行：
 ```
-from GeoTranslate.rule.model import GeoTranslator
-from GeoTranslate.rule.tables import initTables
+from rule.model import GeoTranslator
+from rule.tables import initTables
 ```
 然后使用以下语句新建一个 translator 类并初始化：
 ```
@@ -48,7 +48,7 @@ translator = GeoTranslator(tableData)
 ```
 这样就可以使用 `translator.run(inputNames)` 进行翻译，其中 `inputNames` 是需要翻译的英文的列表。运行结果示例如下：
 
-![image](https://user-images.githubusercontent.com/56507857/119227601-4cc24300-bb41-11eb-8182-84de726842e3.png)
+![image](https://user-images.githubusercontent.com/56507857/119263390-75b20900-bc11-11eb-9638-1416a03ecaf6.png)
 
 ## 项目结构
 1. rule：规则部分。主要由 4 份规则表以及对应的 splitors 组成，代码见 rule/tables.py 和 rule/splitors.py。得到地理名词后，按照通名-专名、可翻译单元、音节、音标的次序依次拆分，并由 result.py 中的 result 类存储，最后输出多个翻译候选，以及对应的规则。

@@ -3,7 +3,19 @@
 本项目主要解决英文地理名词的规范化翻译问题，根据国家标准《外语地名汉字译写导则 英语》（GB/T 17693.1-2008）规定的音译、意译规则实现。
 
 ## 依赖库
-本工具的主要依赖库包括：pytorch, [eng-to-ipa](https://github.com/mphilli/English-to-IPA), docopt
+本工具的主要依赖库包括：[pytorch](https://pytorch.org/), [eng-to-ipa](https://github.com/mphilli/English-to-IPA), docopt。
+依赖库的安装过程如下:
+
+``` python
+### 安装pytorch
+pip download torch==1.7.1+cu101 -f https://download.pytorch.org/whl/torch_stable.html
+### 安装eng-to-ipa
+git clone https://github.com/mphilli/English-to-IPA
+cd English-to-IPA
+python -m pip install .
+### 安装docopt
+pip install docopt
+```
 
 ## 下载方法
 在命令行输入：

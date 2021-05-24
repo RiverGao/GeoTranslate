@@ -63,5 +63,24 @@ translator = GeoTranslator(tableData)
 ![image](https://user-images.githubusercontent.com/56507857/119263390-75b20900-bc11-11eb-9638-1416a03ecaf6.png)
 
 ## 项目结构
-1. rule：规则部分。主要由 4 份规则表以及对应的 splitors 组成，代码见 rule/tables.py 和 rule/splitors.py。得到地理名词后，按照通名-专名、可翻译单元、音节、音标的次序依次拆分，并由 result.py 中的 result 类存储，最后输出多个翻译候选，以及对应的规则。
-2. neural-ipa: 神经网络部分。主要由一个英文单词到国际音标的 Bi-LSTM 网络组成，用来处理 eng-to-ipa 包中未登录的单词。neural-ipa/model.bin 是训练好的模型，基于 13 万条美音数据训练，在测试集上的 BLEU 达到 80 以上。数据集来自 [ipa-dict](https://github.com/open-dict-data/ipa-dict) 项目。
+### 规则部分
+规则部分的代码和资源文件存放在 rule 目录下，主要由 4 份规则表以及对应的 splitors 组成。得到地理名词后，按照通名-专名、可翻译单元、音节、音标的次序依次拆分，并由 result.py 中的 result 类存储，最后输出多个翻译候选，以及对应的规则。主要代码包括：
+
+1. `main.py`: 项目入口文件，用于批量翻译和程序调试等；
+
+1. `app.py`: 交互式网页 demo 的执行文件；
+
+1. `model.py`: 定义 `GeoTranslator` 类，初始化过程包括加载各规则表格，以及初始化拆分器；之后还定义了 4 个阶段的 `split` 方法，以及主要接口 `run` 方法。
+
+1. `splitors.py`: 定义拆分器类 `Splitor`，以及它的子类，包括：专名-通名拆分器 `nameSplitor`，翻译单元拆分器 `unitSplitor`，音节拆分器 `syllableSplitor`，音标拆分器 `phoneticSplitor`。每个拆分器通过自身的 `split` 方法进行对应阶段的处理，同时定义了一些辅助的方法等。用于处理未登录词的神经网络在 `syllableSplitor` 的初始化方法中加载，并由其调用。
+
+1. `results.py`: 定义 `Result` 类。处理流程中，输入地名会存储在一个 `Result` 对象中，并在每个拆分阶段记录拆分动作和原因。流程结束后，通过 `merge` 方法拼接各部分翻译结果，并产生格式化输出。
+
+1. `tables.py`: 定义了规则表格 `Table` 类以及一个初始化接口 `initTables`。`Table` 对象实际上是对 `python` 字典对象的封装，包括数据以及查询方法。
+
+1. `data.py`: 定义了数据加载和打印的工具函数。
+
+1. `config.py`: 存放全局设置变量。
+
+### 神经网络部分。
+主要由一个英文单词到国际音标的 Bi-LSTM 网络组成，用来处理 eng-to-ipa 包中未登录的单词。neural-ipa/model.bin 是训练好的模型，基于 13 万条美音数据训练，在测试集上的 BLEU 达到 80 以上。数据集来自 [ipa-dict](https://github.com/open-dict-data/ipa-dict) 项目。

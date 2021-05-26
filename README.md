@@ -83,4 +83,70 @@ translator = GeoTranslator(tableData)
 1. `config.py`: 存放全局设置变量。
 
 ### 神经网络部分。
-主要由一个英文单词到国际音标的 Bi-LSTM 网络组成，用来处理 eng-to-ipa 包中未登录的单词。neural-ipa/model.bin 是训练好的模型，基于 13 万条美音数据训练，在测试集上的 BLEU 达到 80 以上。数据集来自 [ipa-dict](https://github.com/open-dict-data/ipa-dict) 项目。
+神经网络部分的代码、模型和数据存放在 neural_ipa 目录下，主要由一个英文单词到国际音标的 Bi-LSTM 网络组成，用来处理 eng-to-ipa 包中未登录的单词。代码基于 pytorch 框架，由斯坦福大学 CS224N 课程作业改编，数据集来自 [ipa-dict](https://github.com/open-dict-data/ipa-dict) 项目。这部分的主要内容包括：
+
+1. `word_ipa_data`: 此目录存放了训练数据。原始数据是 `en_US.csv`，包含 130k+ 条美音数据。经过 `datasets.py` 预处理后得到一系列文件，命名格式为 `[train/test/dev].[word/ipa]`，分别表示训练、测试、验证集的单词和音标。带有 `toy_` 前缀的是只包含 8 个样例的小数据集，用于检查相关程序是否正常。
+2. `model.bin`: 训练好的模型，在测试集上的 BLEU 达到 80 以上。翻译系统需要依赖它运行。
+3. `nmt_model.py`: 定义了 Bi-LSTM 网络模型，以及前向、后向过程。
+4. `model_embeddings.py`: 定义了模型的词嵌入模块。
+5. `vocab.py`: 定义了 seq2seq 的源端（英文字母）和目标端（国际音标符号）词表类，并可以生成相应的 json 文件。
+6. `utils.py`: 定义了训练过程中的一些辅助函数。
+7. `run.py`: 训练和测试的入口程序，由 `run.sh` 调用。
+8. `run.sh`: 控制模型训练、测试、生成词表的脚本。
+
+测试中 `model.bin` 已经可以满足翻译需求。如果需要自行训练模型，可以通过命令行执行 `run.sh`，用法如下：
+
+```
+$ bash run.py [option]
+
+options:
+--train
+--test
+--vocab
+--toy-train
+--toy-test
+--toy-vocab
+```
+
+**在训练之前**，需要先选择 `--vocab` 选项生成词表。此后，选择 `--train` 或 `--test` 可以执行 `run.py` 并进行训练或测试。带有 `toy-` 前缀的选项会使用之前提到的小数据集执行操作。由于训练时间较长，建议先使用此选项观察结果是否正常，无误后再开始训练。
+
+如需更改超参数，可参阅 `run.py` 的注释：
+
+```
+"""
+Usage:
+    run.py train --train-src=<file> --train-tgt=<file> --dev-src=<file> --dev-tgt=<file> --vocab=<file> [options]
+    run.py decode [options] MODEL_PATH TEST_SOURCE_FILE OUTPUT_FILE
+    run.py decode [options] MODEL_PATH TEST_SOURCE_FILE TEST_TARGET_FILE OUTPUT_FILE
+
+Options:
+    -h --help                               show this screen.
+    --cuda                                  use GPU
+    --train-src=<file>                      train source file
+    --train-tgt=<file>                      train target file
+    --dev-src=<file>                        dev source file
+    --dev-tgt=<file>                        dev target file
+    --vocab=<file>                          vocab file
+    --seed=<int>                            seed [default: 0]
+    --batch-size=<int>                      batch size [default: 64]
+    --embed-size=<int>                      embedding size [default: 256]
+    --hidden-size=<int>                     hidden size [default: 256]
+    --clip-grad=<float>                     gradient clipping [default: 5.0]
+    --log-every=<int>                       log every [default: 10]
+    --max-epoch=<int>                       max epoch [default: 30]
+    --input-feed                            use input feeding
+    --patience=<int>                        wait for how many iterations to decay learning rate [default: 5]
+    --max-num-trial=<int>                   terminate training after how many trials [default: 5]
+    --lr-decay=<float>                      learning rate decay [default: 0.5]
+    --beam-size=<int>                       beam size [default: 5]
+    --sample-size=<int>                     sample size [default: 5]
+    --lr=<float>                            learning rate [default: 0.001]
+    --uniform-init=<float>                  uniformly initialize all parameters [default: 0.1]
+    --save-to=<file>                        model save path [default: model.bin]
+    --valid-niter=<int>                     perform validation after how many iterations [default: 1000]
+    --dropout=<float>                       dropout [default: 0.3]
+    --max-decoding-time-step=<int>          maximum number of decoding time steps [default: 70]
+"""
+```
+
+该文档采用 `docopt` 库规范编写，规定了各项超参数以及默认取值。根据您的需要，可以直接在注释中指定默认取值，或在 `run.sh` 的命令中添加相关选项。

@@ -82,7 +82,7 @@ translator = GeoTranslator(tableData)
 
 1. `config.py`: 存放全局设置变量。
 
-### 神经网络部分。
+### 神经网络部分
 神经网络部分的代码、模型和数据存放在 neural_ipa 目录下，主要由一个英文单词到国际音标的 Bi-LSTM 网络组成，用来处理 eng-to-ipa 包中未登录的单词。代码基于 pytorch 框架，由斯坦福大学 CS224N 课程作业改编，数据集来自 [ipa-dict](https://github.com/open-dict-data/ipa-dict) 项目。这部分的主要内容包括：
 
 1. `word_ipa_data`: 此目录存放了训练数据。原始数据是 `en_US.csv`，包含 130k+ 条美音数据。经过 `datasets.py` 预处理后得到一系列文件，命名格式为 `[train/test/dev].[word/ipa]`，分别表示训练、测试、验证集的单词和音标。带有 `toy_` 前缀的是只包含 8 个样例的小数据集，用于检查相关程序是否正常。

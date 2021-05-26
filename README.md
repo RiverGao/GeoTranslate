@@ -86,12 +86,19 @@ translator = GeoTranslator(tableData)
 神经网络部分的代码、模型和数据存放在 neural_ipa 目录下，主要由一个英文单词到国际音标的 Bi-LSTM 网络组成，用来处理 eng-to-ipa 包中未登录的单词。代码基于 pytorch 框架，由斯坦福大学 CS224N 课程作业改编，数据集来自 [ipa-dict](https://github.com/open-dict-data/ipa-dict) 项目。这部分的主要内容包括：
 
 1. `word_ipa_data`: 此目录存放了训练数据。原始数据是 `en_US.csv`，包含 130k+ 条美音数据。经过 `datasets.py` 预处理后得到一系列文件，命名格式为 `[train/test/dev].[word/ipa]`，分别表示训练、测试、验证集的单词和音标。带有 `toy_` 前缀的是只包含 8 个样例的小数据集，用于检查相关程序是否正常。
+
 2. `model.bin`: 训练好的模型，在测试集上的 BLEU 达到 80 以上。翻译系统需要依赖它运行。
+
 3. `nmt_model.py`: 定义了 Bi-LSTM 网络模型，以及前向、后向过程。
+
 4. `model_embeddings.py`: 定义了模型的词嵌入模块。
+
 5. `vocab.py`: 定义了 seq2seq 的源端（英文字母）和目标端（国际音标符号）词表类，并可以生成相应的 json 文件。
+
 6. `utils.py`: 定义了训练过程中的一些辅助函数。
+
 7. `run.py`: 训练和测试的入口程序，由 `run.sh` 调用。
+
 8. `run.sh`: 控制模型训练、测试、生成词表的脚本。
 
 测试中 `model.bin` 已经可以满足翻译需求。如果需要自行训练模型，可以通过命令行执行 `run.sh`，用法如下：

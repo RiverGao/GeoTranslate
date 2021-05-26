@@ -159,4 +159,7 @@ Options:
 该文档采用 `docopt` 库规范编写，规定了各项超参数以及默认取值。根据您的需要，可以直接在注释中指定默认取值，或在 `run.sh` 的命令中添加相关选项。
 
 此外，若要交互式调用此神经网络，可以在初始化 `GeoTranslator` 类后，调用其 `syllableSplitor.nmt_model` 的 `beam_search` 函数，例如：
-其中 ``
+
+![image](https://user-images.githubusercontent.com/56507857/119627606-ec801980-be3e-11eb-9ec8-06375859b9eb.png)
+
+其中第 6 行是将输入单词转化成字符列表。模型会输出 5 个候选，并给出相应的得分。
